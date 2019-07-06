@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs-extra')
 const Promise = require('bluebird')
 const resolve = require('resolve')
-const api = require('../api/core.js')
+const TwitchCord = require('../twitchcord')
 
 const { getCurrentWebContents } = require('electron').remote
 const { ipcRenderer, remote } = require('electron')
@@ -34,7 +34,11 @@ process.once('loaded', async () => {
 	const gWindow = remote.getCurrentWindow()
 	
 	gWindow.webContents.on('did-finish-load', () => {
+		/*
 		appmount = document.getElementById('app-mount')
 		api.injectCSS('tcmain', fs.readFileSync(__dirname + "/../../resources/twitchcord.css"))
+		*/
+		global.twitchcord = new TwitchCord()
+		twitchcord.enable()
 	})
 })
