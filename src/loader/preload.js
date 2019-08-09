@@ -1,8 +1,8 @@
+console.log("***** PRELOAD LOADING *****")
 const path = require('path')
 const fs = require('fs-extra')
 const Promise = require('bluebird')
 const resolve = require('resolve')
-const TwitchCord = require('../twitchcord')
 
 const { getCurrentWebContents } = require('electron').remote
 const { ipcRenderer, remote } = require('electron')
@@ -28,12 +28,15 @@ process.once('loaded', async () => {
 	//await util.webpackAvailable()
 
 	while (!window.webpackJsonp) {
-		await Promise.delay(100)
+		await Promise.delay(1000)
 	}
 
+	console.log("webpackJsonp found")
 	const gWindow = remote.getCurrentWindow()
 	
 	gWindow.webContents.on('did-finish-load', () => {
+		const TwitchCord = require('../twitchcord')
+
 		/*
 		appmount = document.getElementById('app-mount')
 		api.injectCSS('tcmain', fs.readFileSync(__dirname + "/../../resources/twitchcord.css"))

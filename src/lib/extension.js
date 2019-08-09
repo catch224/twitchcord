@@ -12,8 +12,8 @@ module.exports = class Extension {
         this.load()
     }
 
-    log(msg) {
-        console.log("Twitchcord plugin", this.name, ": " + msg)
+    log(...msg) {
+        console.log("Twitchcord plugin", this.name, ": ", ...msg)
     }
     load() {
         // load manifest
@@ -50,6 +50,7 @@ module.exports = class Extension {
                 this.extensionScript = require(pluginPath)
             } catch(e) {
                 this.log("error loading plugin script", pluginPath, e)
+                this.log("Stack:",e.stack)
                 return
             }
         }
@@ -65,13 +66,13 @@ module.exports = class Extension {
         // start init code
         if (this.extensionScript) {
             try {
-                this.extensionScript.enable()
+                this.extensionScript.start()
             } catch(e) {
                 // Log error
-                this.log("Error enabling extension " + this.path)
+                this.log("Error enabling extension", this.path, e)
                 return
             }
-
+            this.log("Extension loaded successfully", this.path)
         }
     }
 
