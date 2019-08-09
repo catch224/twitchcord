@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "description": "Core Twitchcord Theme",
     "author": "BakedPVP",
-    "script": "init.js",
+    "script": "Twitchcord.plugin.js",
     "style": "twitchcord.css",
     "readme": "readme.txt"
 }
