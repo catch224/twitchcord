@@ -8,6 +8,7 @@ module.exports = class Extension {
         this.path = extensionPath
         this.name = this.path
         this.isLoaded = false
+        this.isEnabled = false
         this.api = api // debug
         this.load()
     }
@@ -36,6 +37,13 @@ module.exports = class Extension {
             // Load CSS file
             if (this.manifest.style) {
                 this.style = this.compileCSS(this.manifest.style)
+                fs.watchFile(path.resolve(this.path, this.manifest.style) , (curr, prev) => {
+                    this.style = this.compileCSS(this.manifest.style)
+                    if (this.isEnabled) {
+                        api.core.removeCSS(this.manifest.name)
+                        api.core.injectCSS(this.manifest.name, this.style)
+                    }
+                })
             }
         } catch(e) {
             this.log("error loading styles", e)
@@ -62,7 +70,7 @@ module.exports = class Extension {
             // Inject the CSS
             api.core.injectCSS(this.manifest.name, this.style)
         }
-
+        this.isEnabled = true
         // start init code
         if (this.extensionScript) {
             try {
